@@ -2,23 +2,26 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable("categories", {
+    return queryInterface.createTable("post_categories", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      key: {
-        type: Sequelize.STRING,
+      postId: {
+        type: Sequelize.INTEGER,
         allowNull: false,
-        references: { model: "users", key: "id" },
+        references: { model: "posts", key: "id" },
+        onUpdated: "cascade",
+        onDelere: "cascade",
+      },
+      categoryId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: { model: "categories", key: "id" },
         onUpdated: "cascade",
         onDelete: "cascade",
-      },
-      name: {
-        type: Sequelize.STRING,
-        allowNull: false,
       },
       createdAt: {
         allowNull: false,
@@ -30,7 +33,8 @@ module.exports = {
       },
     });
   },
+
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable("categories");
+    return queryInterface.dropTable("post_categpries");
   },
 };
