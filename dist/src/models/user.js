@@ -20,6 +20,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = __importStar(require("sequelize"));
+const models_1 = require("../models");
 class User extends sequelize_1.Model {
 }
 User.init({
@@ -54,8 +55,8 @@ User.init({
         allowNull: false,
     },
 }, {
-    sequelize: ,
-    modelName: 'users'
+    sequelize: models_1.sequelize,
+    modelName: "user",
 });
-console.log(User === sequelize.models.User);
+exports.default = User;
 //# sourceMappingURL=user.js.map

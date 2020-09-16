@@ -7,16 +7,16 @@ const passport_1 = __importDefault(require("passport"));
 const passport_local_1 = __importDefault(require("passport-local"));
 const user_1 = __importDefault(require("../models/user"));
 const LocalStrategy = passport_local_1.default.Strategy;
-passport_1.default.use(new LocalStrategy({ usernameField: "loginId", passwordField: "password" }, (loginId, password, done) => {
-    user_1.default.findOne({ username: loginId }, function (err, user) {
+passport_1.default.use(new LocalStrategy(function (username, password, done) {
+    user_1.default.findOne({ username: username }, function (err, user) {
         if (err) {
             return done(err);
         }
         if (!user) {
-            return done(null, false, { message: " ユーザーIDが間違っています" });
+            return done(null, false);
         }
         if (!user.verifyPassword(password)) {
-            return done(null, false, { message: "passwordが間違っています" });
+            return done(null, false);
         }
         return done(null, user);
     });
