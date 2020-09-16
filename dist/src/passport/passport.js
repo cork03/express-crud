@@ -7,11 +7,11 @@ const passport_1 = __importDefault(require("passport"));
 const passport_local_1 = __importDefault(require("passport-local"));
 const user_1 = __importDefault(require("../models/user"));
 const LocalStrategy = passport_local_1.default.Strategy;
-passport_1.default.use(new LocalStrategy(function (username, password, done) {
-    user_1.default.findOne({ username: username }, function (err, user) {
-        if (err) {
-            return done(err);
-        }
+passport_1.default.use(new LocalStrategy({
+    usernameField: "loginId",
+    passwordField: "password",
+}, (loginId, password, done) => {
+    return user_1.default.findOne({ where: { id: loginId } }).then((user) => {
         if (!user) {
             return done(null, false);
         }

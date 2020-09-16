@@ -25,6 +25,7 @@ PostCategory.init(
   {
     sequelize,
     modelName: "postCategory",
+    tableName: "post_categories",
   }
 );
 

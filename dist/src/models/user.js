@@ -46,17 +46,10 @@ User.init({
         type: sequelize_1.default.TEXT,
         allowNull: false,
     },
-    createAt: {
-        type: sequelize_1.default.DATE,
-        allowNull: false,
-    },
-    updatedAt: {
-        type: sequelize_1.default.DATE,
-        allowNull: false,
-    },
 }, {
     sequelize: models_1.sequelize,
     modelName: "user",
+    tableName: "users",
 });
 exports.default = User;
 //# sourceMappingURL=user.js.map

@@ -1,6 +1,7 @@
 import express from "express";
 import auth from "./src/routers/auth";
 import Category from "./src/routers/category";
+import ayth from "./src/routers/auth";
 
 const app = express();
 const port = 3000;

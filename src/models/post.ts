@@ -33,6 +33,7 @@ Post.init(
   {
     sequelize,
     modelName: "post",
+    tableName: "posts",
   }
 );
 

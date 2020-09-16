@@ -51,6 +51,7 @@ Post.init({
 }, {
     sequelize: models_1.sequelize,
     modelName: "post",
+    tableName: "posts",
 });
 exports.default = Post;
 //# sourceMappingURL=post.js.map

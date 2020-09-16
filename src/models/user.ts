@@ -27,18 +27,11 @@ User.init(
       type: Sequelize.TEXT,
       allowNull: false,
     },
-    createAt: {
-      type: Sequelize.DATE,
-      allowNull: false,
-    },
-    updatedAt: {
-      type: Sequelize.DATE,
-      allowNull: false,
-    },
   },
   {
     sequelize,
     modelName: "user",
+    tableName: "users",
   }
 );
 

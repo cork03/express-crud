@@ -43,6 +43,7 @@ PostCategory.init({
 }, {
     sequelize: models_1.sequelize,
     modelName: "postCategory",
+    tableName: "post_categories",
 });
 exports.default = PostCategory;
 //# sourceMappingURL=post_category.js.map

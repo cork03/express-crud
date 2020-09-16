@@ -40,7 +40,8 @@ Category.init({
     },
 }, {
     sequelize: models_1.sequelize,
-    modelName: "category",
+    modelName: "Category",
+    tableName: "categories",
 });
 exports.default = Category;
 //# sourceMappingURL=category.js.map

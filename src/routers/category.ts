@@ -5,10 +5,8 @@ const router = express.Router();
 router.get("/", async function (req, res, next) {
   try {
     const categories = await Category.findAll();
-    res.send({ categories });
-    console.log("seucess");
+    res.json({ categories });
   } catch (error) {
-    console.log("error");
     return next(error);
   }
 });
