@@ -18,9 +18,6 @@ export const hash = (pass: string) => {
 export const compare = (pass: string, hashedPass: string) => {
   return new Promise((resolve, reject) => {
     bcrypt.compare(pass, hashedPass, (e: Error, check: boolean) => {
-      if (e) {
-        reject(e);
-      }
       resolve(check);
     });
   });

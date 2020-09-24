@@ -3,7 +3,6 @@ import auth from "./src/routers/auth";
 import category from "./src/routers/category";
 import user from "./src/routers/user";
 import posts from "./src/routers/posts";
-import { hash, compare } from "./src/passport/bcrypt";
 
 const app = express();
 const port = 3000;
