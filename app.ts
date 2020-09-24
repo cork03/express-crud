@@ -1,7 +1,9 @@
 import express from "express";
 import auth from "./src/routers/auth";
-import Category from "./src/routers/category";
-import ayth from "./src/routers/auth";
+import category from "./src/routers/category";
+import user from "./src/routers/user";
+import posts from "./src/routers/posts";
+import { hash, compare } from "./src/passport/bcrypt";
 
 const app = express();
 const port = 3000;
@@ -10,7 +12,9 @@ app.get("/", (req, res) => {
 });
 
 app.use("/auth", auth);
-app.use("/category", Category);
+app.use("/category", category);
+app.use("/user", user);
+app.use("/posts", posts);
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);

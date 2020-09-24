@@ -11,11 +11,11 @@ passport_1.default.use(new LocalStrategy({
     usernameField: "loginId",
     passwordField: "password",
 }, (loginId, password, done) => {
-    return user_1.default.findOne({ where: { id: loginId } }).then((user) => {
+    return user_1.default.findOne({ where: { loginId } }).then((user) => {
         if (!user) {
             return done(null, false);
         }
-        if (!user.verifyPassword(password)) {
+        if (!password) {
             return done(null, false);
         }
         return done(null, user);

@@ -11,11 +11,11 @@ passport.use(
       passwordField: "password",
     },
     (loginId, password, done) => {
-      return User.findOne({ where: { id: loginId } }).then((user) => {
+      return User.findOne({ where: { loginId } }).then((user) => {
         if (!user) {
           return done(null, false);
         }
-        if (!user.verifyPassword(password)) {
+        if (!password) {
           return done(null, false);
         }
         return done(null, user);
