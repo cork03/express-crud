@@ -18,3 +18,12 @@ app.use("/posts", posts);
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
 });
+
+const res = {
+  use: {
+    loginId: "hoge@example.com",
+    name: "hoge",
+    iconUrl: "http://localhost",
+    password: "password",
+  },
+};

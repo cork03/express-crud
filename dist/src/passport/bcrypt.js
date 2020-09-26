@@ -19,6 +19,9 @@ exports.hash = (pass) => {
 exports.compare = (pass, hashedPass) => {
     return new Promise((resolve, reject) => {
         bcrypt_1.default.compare(pass, hashedPass, (e, check) => {
+            if (e) {
+                reject(e);
+            }
             resolve(check);
         });
     });

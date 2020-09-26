@@ -8,8 +8,8 @@ const category_1 = __importDefault(require("../models/category"));
 const router = express_1.default.Router();
 router.get("/", async function (req, res, next) {
     try {
-        const categories = await category_1.default.findAll();
-        res.json({ categories });
+        const category = await category_1.default.findAll();
+        res.json(category);
     }
     catch (error) {
         return next(error);

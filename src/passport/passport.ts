@@ -1,6 +1,7 @@
 import passport from "passport";
 import passportLocal from "passport-local";
 import User from "../models/user";
+import { compare } from "./bcrypt";
 
 const LocalStrategy = passportLocal.Strategy;
 
@@ -10,13 +11,14 @@ passport.use(
       usernameField: "loginId",
       passwordField: "password",
     },
-    (loginId, password, done) => {
-      return User.findOne({ where: { loginId } }).then((user) => {
+    async function (loginId: string, password: string, done) {
+      return User.findOne({ where: { loginId } }).then((user: User | null) => {
+        const check = compare(password, user.authorize_token);
         if (!user) {
-          return done(null, false);
+          return done(null, false, { message: "user undefind" });
         }
-        if (!password) {
-          return done(null, false);
+        if (!check) {
+          return done(null, false, { message: "incorrect password" });
         }
         return done(null, user);
       });
