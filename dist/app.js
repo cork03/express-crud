@@ -8,8 +8,11 @@ const auth_1 = __importDefault(require("./src/routers/auth"));
 const category_1 = __importDefault(require("./src/routers/category"));
 const user_1 = __importDefault(require("./src/routers/user"));
 const posts_1 = __importDefault(require("./src/routers/posts"));
+const body_parser_1 = __importDefault(require("body-parser"));
 const app = express_1.default();
 const port = 3000;
+app.use(express_1.default.json());
+app.use(body_parser_1.default.json());
 app.get("/", (req, res) => {
     res.json({ message: "ok" });
 });

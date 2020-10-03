@@ -5,22 +5,33 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const passport_1 = __importDefault(require("passport"));
 const passport_local_1 = __importDefault(require("passport-local"));
+const passport_jwt_1 = __importDefault(require("passport-jwt"));
 const user_1 = __importDefault(require("../models/user"));
 const bcrypt_1 = require("./bcrypt");
 const LocalStrategy = passport_local_1.default.Strategy;
+const JwtStrategy = passport_jwt_1.default.Strategy;
+const ExtractJWT = passport_jwt_1.default.ExtractJwt;
 passport_1.default.use(new LocalStrategy({
     usernameField: "loginId",
     passwordField: "password",
 }, async function (loginId, password, done) {
+    console.log("async");
     return user_1.default.findOne({ where: { loginId } }).then((user) => {
-        const check = bcrypt_1.compare(password, user.authorize_token);
         if (!user) {
-            return done(null, false, { message: "user undefind" });
+            console.log("1");
+            return done(null, false);
         }
-        if (!check) {
-            return done(null, false, { message: "incorrect password" });
+        const correctPass = bcrypt_1.compare(password, user.authorize_token);
+        if (!correctPass) {
+            console.log("2");
+            return done(null, false);
         }
+        console.log("3");
         return done(null, user);
     });
 }));
+passport_1.default.use(new JwtStrategy({
+    jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+    secretOrKey: "dfa",
+}, () => { }));
 //# sourceMappingURL=passport.js.map

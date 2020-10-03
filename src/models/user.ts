@@ -1,7 +1,9 @@
 import Sequelize, { Model } from "sequelize";
 import { sequelize } from "../models";
 
-class User extends Model {}
+class User extends Model {
+  public authorize_token?: string;
+}
 
 User.init(
   {

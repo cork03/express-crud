@@ -3,9 +3,14 @@ import auth from "./src/routers/auth";
 import category from "./src/routers/category";
 import user from "./src/routers/user";
 import posts from "./src/routers/posts";
+import bodyParser from "body-parser";
 
 const app = express();
 const port = 3000;
+
+app.use(express.json());
+app.use(bodyParser.json());
+
 app.get("/", (req, res) => {
   res.json({ message: "ok" });
 });
