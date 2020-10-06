@@ -14,24 +14,28 @@ const ExtractJWT = passport_jwt_1.default.ExtractJwt;
 passport_1.default.use(new LocalStrategy({
     usernameField: "loginId",
     passwordField: "password",
-}, async function (loginId, password, done) {
-    console.log("async");
-    return user_1.default.findOne({ where: { loginId } }).then((user) => {
+}, (loginId, password, done) => {
+    return user_1.default.findOne({ where: { loginId } }).then(async (user) => {
         if (!user) {
-            console.log("1");
             return done(null, false);
         }
-        const correctPass = bcrypt_1.compare(password, user.authorize_token);
-        if (!correctPass) {
-            console.log("2");
+        const isCorrectPass = await bcrypt_1.compare(password, user.authorize_token);
+        if (!isCorrectPass) {
             return done(null, false);
         }
-        console.log("3");
         return done(null, user);
     });
 }));
 passport_1.default.use(new JwtStrategy({
     jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
-    secretOrKey: "dfa",
-}, () => { }));
+    secretOrKey: process.env.SECRET_KEY,
+}, (jwtPayload, done) => {
+    return user_1.default.findOne({ where: { loginId: jwtPayload.loginId } })
+        .then((user) => {
+        return done(null, user);
+    })
+        .catch((error) => {
+        return done(null, false);
+    });
+}));
 //# sourceMappingURL=passport.js.map

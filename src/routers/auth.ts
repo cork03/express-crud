@@ -2,8 +2,7 @@ import express from "express";
 import passport from "passport";
 import { hash } from "../passport/bcrypt";
 import User from "../models/user";
-import { raw } from "body-parser";
-import { RSA_NO_PADDING } from "constants";
+import jwt from "jsonwebtoken";
 
 const router = express.Router();
 
@@ -26,11 +25,14 @@ router.post("/signup", async (req, res) => {
 });
 
 router.post("/login", function (req, res, next) {
-  console.log("post");
   passport.authenticate("local", { session: false }, (err, user, info) => {
-    console.log("res");
-    res.json({ ok: "ok" });
-  });
+    if (err || !user) {
+      return res.status(401).json({ error: "認証に失敗しました" });
+    }
+    const payload = { id: user.id, loginId: user.loginId };
+    const jwtToken = jwt.sign(payload, process.env.SECRET_KEY!);
+    res.json({ jwtToken });
+  })(req, res, next);
 });
 
 export default router;

@@ -9,37 +9,47 @@ const LocalStrategy = passportLocal.Strategy;
 const JwtStrategy = passportJWT.Strategy;
 const ExtractJWT = passportJWT.ExtractJwt;
 
+// ローカルpassportの設定
+
 passport.use(
   new LocalStrategy(
     {
       usernameField: "loginId",
       passwordField: "password",
     },
-    async function (loginId: string, password: string, done: Function) {
-      console.log("async");
-      return User.findOne({ where: { loginId } }).then((user: User | null) => {
-        if (!user) {
-          console.log("1");
-          return done(null, false);
+    (loginId: string, password: string, done: Function) => {
+      return User.findOne({ where: { loginId } }).then(
+        async (user: User | null) => {
+          if (!user) {
+            return done(null, false);
+          }
+          const isCorrectPass = await compare(password, user.authorize_token!);
+          if (!isCorrectPass) {
+            return done(null, false);
+          }
+          return done(null, user);
         }
-        const correctPass = compare(password, user.authorize_token!);
-        if (!correctPass) {
-          console.log("2");
-          return done(null, false);
-        }
-        console.log("3");
-        return done(null, user);
-      });
+      );
     }
   )
 );
+
+// jwtPassportの設定
 
 passport.use(
   new JwtStrategy(
     {
       jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
-      secretOrKey: "dfa",
+      secretOrKey: process.env.SECRET_KEY,
     },
-    () => {}
+    (jwtPayload: any, done: Function) => {
+      return User.findOne({ where: { loginId: jwtPayload.loginId } })
+        .then((user: User | null) => {
+          return done(null, user);
+        })
+        .catch((error: Error) => {
+          return done(null, false);
+        });
+    }
   )
 );

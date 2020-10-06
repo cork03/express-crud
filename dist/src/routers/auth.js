@@ -7,6 +7,7 @@ const express_1 = __importDefault(require("express"));
 const passport_1 = __importDefault(require("passport"));
 const bcrypt_1 = require("../passport/bcrypt");
 const user_1 = __importDefault(require("../models/user"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const router = express_1.default.Router();
 router.post("/signup", async (req, res) => {
     const { user } = req.body;
@@ -26,11 +27,14 @@ router.post("/signup", async (req, res) => {
     res.status(201).json({ massege: "ユーザーが作成されました。" });
 });
 router.post("/login", function (req, res, next) {
-    console.log("post");
     passport_1.default.authenticate("local", { session: false }, (err, user, info) => {
-        console.log("res");
-        res.json({ ok: "ok" });
-    });
+        if (err || !user) {
+            return res.status(401).json({ error: "認証に失敗しました" });
+        }
+        const payload = { id: user.id, loginId: user.loginId };
+        const jwtToken = jsonwebtoken_1.default.sign(payload, process.env.SECRET_KEY);
+        res.json({ jwtToken });
+    })(req, res, next);
 });
 exports.default = router;
 //# sourceMappingURL=auth.js.map
