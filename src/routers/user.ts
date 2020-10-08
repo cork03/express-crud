@@ -1,10 +1,10 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import passport from "passport";
 
 const router = express.Router();
 
-router.get("/", (req, res) => {
-  const user = req.user;
+router.get("/", (req: any, res: Response) => {
+  const { authorizeToken, ...user } = req.user.dataValues;
   res.json({ user });
 });
 
