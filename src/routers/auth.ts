@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request, Response, NextFunction } from "express";
 import passport from "passport";
 import { hash } from "../passport/bcrypt";
 import User from "../models/user";
@@ -6,7 +6,7 @@ import jwt from "jsonwebtoken";
 
 const router = express.Router();
 
-router.post("/signup", async (req, res) => {
+router.post("/signup", async (req: Request, res: Response) => {
   const { user } = req.body;
   const registeredUser = await User.findOne({
     where: { loginId: user.loginId },
@@ -24,16 +24,24 @@ router.post("/signup", async (req, res) => {
   res.status(201).json({ massege: "ユーザーが作成されました。" });
 });
 
-router.post("/login", function (req, res, next) {
-  passport.authenticate("local", { session: false }, (err, user, info) => {
-    if (err || !user) {
-      return res.status(401).json({ error: "認証に失敗しました" });
+router.post("/login", function (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  passport.authenticate(
+    "local",
+    { session: false },
+    (err: Error, user: any, info: any) => {
+      if (err || !user) {
+        return res.status(401).json({ error: "認証に失敗しました" });
+      }
+      const payload = { id: user.id, loginId: user.loginId };
+      const jwtToken = jwt.sign(payload, process.env.SECRET_KEY!);
+      user.authorizeToken = "[secret]";
+      res.json({ user, token: jwtToken });
     }
-    const payload = { id: user.id, loginId: user.loginId };
-    const jwtToken = jwt.sign(payload, process.env.SECRET_KEY!);
-    user.authorizeToken = "[secret]";
-    res.json({ user, token: jwtToken });
-  })(req, res, next);
+  )(req, res, next);
 });
 
 export default router;
