@@ -10,7 +10,8 @@ router.get("/", (req, res) => {
     res.json({ user });
 });
 router.get("/posts", (req, res) => {
-    res.send("user/posts");
+    const query = req.query;
+    res.json({ user: query });
 });
 exports.default = router;
 //# sourceMappingURL=user.js.map

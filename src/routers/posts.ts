@@ -1,5 +1,6 @@
-import express from "express";
+import express, { Response } from "express";
 import passport from "passport";
+import Post from "../models/post";
 
 const router = express.Router();
 
@@ -11,8 +12,13 @@ router.get("/:id", (req, res) => {
   res.send("posts/id");
 });
 
-router.post("/", (req, res) => {
-  res.send("posts/id");
+router.post("/", async (req: any, res: Response) => {
+  const {
+    post: { categoryIds, ...postElement },
+  } = req.body;
+  const userId = req.user.id;
+  await Post.create({ ...postElement, userId: userId });
+  res.json({});
 });
 
 router.patch("/:id", (req, res) => {

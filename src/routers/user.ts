@@ -1,5 +1,5 @@
 import express, { Request, Response } from "express";
-import passport from "passport";
+import passport, { use } from "passport";
 
 const router = express.Router();
 
@@ -8,8 +8,9 @@ router.get("/", (req: any, res: Response) => {
   res.json({ user });
 });
 
-router.get("/posts", (req, res) => {
-  res.send("user/posts");
+router.get("/posts", (req: any, res: Response) => {
+  const query = req.query;
+  res.json({ user: query });
 });
 
 export default router;

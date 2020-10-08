@@ -6,7 +6,7 @@ import jwt from "jsonwebtoken";
 
 const router = express.Router();
 
-router.post("/signup", async (req: Request, res: Response) => {
+router.post("/signup", async (req: any, res: Response) => {
   const { user } = req.body;
   const registeredUser = await User.findOne({
     where: { loginId: user.loginId },
@@ -24,11 +24,7 @@ router.post("/signup", async (req: Request, res: Response) => {
   res.status(201).json({ massege: "ユーザーが作成されました。" });
 });
 
-router.post("/login", function (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) {
+router.post("/login", function (req: any, res: Response, next: NextFunction) {
   passport.authenticate(
     "local",
     { session: false },
