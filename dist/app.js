@@ -25,7 +25,7 @@ const jwtAuthenticated = [
     { path: "/category", router: category_1.default },
 ];
 jwtAuthenticated.forEach((router) => {
-    app.use(router.path, passport_1.default.authenticate("jwt", { session: false }, router.router));
+    app.use(router.path, passport_1.default.authenticate("jwt", { session: false }), router.router);
 });
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`);

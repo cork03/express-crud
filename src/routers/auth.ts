@@ -18,7 +18,7 @@ router.post("/signup", async (req, res) => {
     return res.status(422).json({ error: "すでに登録済みのユーザーです" });
   }
   const hashedPass = await hash(user.password);
-  user.authorize_token = hashedPass;
+  user.authorizeToken = hashedPass;
   delete user.password;
   await User.create(user);
   res.status(201).json({ massege: "ユーザーが作成されました。" });
@@ -31,7 +31,8 @@ router.post("/login", function (req, res, next) {
     }
     const payload = { id: user.id, loginId: user.loginId };
     const jwtToken = jwt.sign(payload, process.env.SECRET_KEY!);
-    res.json({ jwtToken });
+    user.authorizeToken = "[secret]";
+    res.json({ user, token: jwtToken });
   })(req, res, next);
 });
 

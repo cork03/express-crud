@@ -34,7 +34,7 @@ User.init({
         type: sequelize_1.default.STRING,
         allowNull: false,
     },
-    authorize_token: {
+    authorizeToken: {
         type: sequelize_1.default.STRING,
         allowNull: false,
     },

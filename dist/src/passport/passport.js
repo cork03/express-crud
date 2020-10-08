@@ -19,7 +19,7 @@ passport_1.default.use(new LocalStrategy({
         if (!user) {
             return done(null, false);
         }
-        const isCorrectPass = await bcrypt_1.compare(password, user.authorize_token);
+        const isCorrectPass = await bcrypt_1.compare(password, user.authorizeToken);
         if (!isCorrectPass) {
             return done(null, false);
         }

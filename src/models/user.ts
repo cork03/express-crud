@@ -2,7 +2,7 @@ import Sequelize, { Model } from "sequelize";
 import { sequelize } from "../models";
 
 class User extends Model {
-  public authorize_token?: string;
+  public authorizeToken?: string;
 }
 
 User.init(
@@ -17,7 +17,7 @@ User.init(
       type: Sequelize.STRING,
       allowNull: false,
     },
-    authorize_token: {
+    authorizeToken: {
       type: Sequelize.STRING,
       allowNull: false,
     },

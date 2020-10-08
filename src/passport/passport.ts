@@ -23,7 +23,7 @@ passport.use(
           if (!user) {
             return done(null, false);
           }
-          const isCorrectPass = await compare(password, user.authorize_token!);
+          const isCorrectPass = await compare(password, user.authorizeToken!);
           if (!isCorrectPass) {
             return done(null, false);
           }

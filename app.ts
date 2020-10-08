@@ -28,7 +28,8 @@ const jwtAuthenticated = [
 jwtAuthenticated.forEach((router) => {
   app.use(
     router.path,
-    passport.authenticate("jwt", { session: false }, router.router)
+    passport.authenticate("jwt", { session: false }),
+    router.router
   );
 });
 
