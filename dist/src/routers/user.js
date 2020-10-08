@@ -6,7 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const router = express_1.default.Router();
 router.get("/", (req, res) => {
-    res.json({ user: req.user });
+    const user = req.user;
+    res.json({ user });
 });
 router.get("/posts", (req, res) => {
     res.send("user/posts");

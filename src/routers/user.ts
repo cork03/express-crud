@@ -4,7 +4,8 @@ import passport from "passport";
 const router = express.Router();
 
 router.get("/", (req, res) => {
-  res.json({ user: req.user });
+  const user = req.user;
+  res.json({ user });
 });
 
 router.get("/posts", (req, res) => {
