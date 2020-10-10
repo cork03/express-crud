@@ -5,13 +5,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const router = express_1.default.Router();
-router.get("/", (req, res) => {
+router.get("/", async (req, res) => {
     const { authorizeToken, ...user } = req.user.dataValues;
     res.json({ user });
 });
-router.get("/posts", (req, res) => {
-    const query = req.query;
-    res.json({ user: query });
+router.get("/posts", async (req, res) => {
+    try {
+        res.json({ test: "ok" });
+    }
+    catch (e) {
+        res.json({ massage: e });
+    }
 });
 exports.default = router;
 //# sourceMappingURL=user.js.map

@@ -1,5 +1,7 @@
 import Sequelize, { Model } from "sequelize";
 import { sequelize } from "../models";
+import PostCategory from "./post_category";
+import Category from "./category";
 
 class Post extends Model {}
 
@@ -14,7 +16,6 @@ Post.init(
     userId: {
       type: Sequelize.INTEGER,
       allowNull: false,
-      references: { model: "users", key: "id" },
     },
     title: {
       type: Sequelize.STRING,

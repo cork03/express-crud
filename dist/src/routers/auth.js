@@ -34,7 +34,7 @@ router.post("/login", function (req, res, next) {
         const payload = { id: user.id, loginId: user.loginId };
         const jwtToken = jsonwebtoken_1.default.sign(payload, process.env.SECRET_KEY);
         user.authorizeToken = "[secret]";
-        res.json({ user, token: jwtToken });
+        res.status(200).json({ user, token: jwtToken });
     })(req, res, next);
 });
 exports.default = router;

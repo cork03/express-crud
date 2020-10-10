@@ -1,5 +1,6 @@
 import Sequelize, { Model } from "sequelize";
 import { sequelize } from "../models";
+import Post from "./post";
 
 class User extends Model {
   public authorizeToken?: string;

@@ -35,7 +35,7 @@ router.post("/login", function (req: any, res: Response, next: NextFunction) {
       const payload = { id: user.id, loginId: user.loginId };
       const jwtToken = jwt.sign(payload, process.env.SECRET_KEY!);
       user.authorizeToken = "[secret]";
-      res.json({ user, token: jwtToken });
+      res.status(200).json({ user, token: jwtToken });
     }
   )(req, res, next);
 });

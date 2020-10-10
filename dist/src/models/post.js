@@ -33,7 +33,6 @@ Post.init({
     userId: {
         type: sequelize_1.default.INTEGER,
         allowNull: false,
-        references: { model: "users", key: "id" },
     },
     title: {
         type: sequelize_1.default.STRING,
