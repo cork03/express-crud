@@ -33,12 +33,10 @@ PostCategory.init({
     postId: {
         type: sequelize_1.default.INTEGER,
         allowNull: false,
-        references: { model: "posts", key: "id" },
     },
     categoryId: {
         type: sequelize_1.default.INTEGER,
         allowNull: false,
-        references: { model: "categories", key: "id" },
     },
 }, {
     sequelize: models_1.sequelize,

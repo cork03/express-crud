@@ -3,7 +3,23 @@ import { sequelize } from "../models";
 import PostCategory from "./post_category";
 import Category from "./category";
 
-class Post extends Model {}
+class Post extends Model {
+  public id?: number;
+  static async signUpPost(postElement: any, categoryId: number[]) {
+    await sequelize.transaction(async (transaction) => {
+      const post = await Post.create(postElement, { transaction });
+      for (let i: number = 0; i < categoryId.length; i++) {
+        await PostCategory.create(
+          {
+            postId: post.id,
+            categoryId: categoryId[i],
+          },
+          { transaction }
+        );
+      }
+    });
+  }
+}
 
 Post.init(
   {
@@ -37,5 +53,10 @@ Post.init(
     tableName: "posts",
   }
 );
+
+Post.hasMany(PostCategory);
+PostCategory.belongsTo(Post);
+Post.belongsToMany(Category, { through: PostCategory });
+Category.belongsToMany(Post, { through: PostCategory });
 
 export default Post;

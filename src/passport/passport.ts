@@ -3,7 +3,6 @@ import passportLocal from "passport-local";
 import passportJWT from "passport-jwt";
 import User from "../models/user";
 import { compare } from "./bcrypt";
-import { createSecretKey } from "crypto";
 
 const LocalStrategy = passportLocal.Strategy;
 const JwtStrategy = passportJWT.Strategy;

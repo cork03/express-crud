@@ -18,10 +18,26 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = __importStar(require("sequelize"));
 const models_1 = require("../models");
+const post_category_1 = __importDefault(require("./post_category"));
+const category_1 = __importDefault(require("./category"));
 class Post extends sequelize_1.Model {
+    static async signUpPost(postElement, categoryId) {
+        await models_1.sequelize.transaction(async (transaction) => {
+            const post = await Post.create(postElement, { transaction });
+            for (let i = 0; i < categoryId.length; i++) {
+                await post_category_1.default.create({
+                    postId: post.id,
+                    categoryId: categoryId[i],
+                }, { transaction });
+            }
+        });
+    }
 }
 Post.init({
     id: {
@@ -52,5 +68,9 @@ Post.init({
     modelName: "post",
     tableName: "posts",
 });
+Post.hasMany(post_category_1.default);
+post_category_1.default.belongsTo(Post);
+Post.belongsToMany(category_1.default, { through: post_category_1.default });
+category_1.default.belongsToMany(Post, { through: post_category_1.default });
 exports.default = Post;
 //# sourceMappingURL=post.js.map

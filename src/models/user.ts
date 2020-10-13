@@ -38,4 +38,7 @@ User.init(
   }
 );
 
+User.hasMany(Post);
+Post.belongsTo(User);
+
 export default User;

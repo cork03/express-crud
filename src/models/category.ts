@@ -1,5 +1,6 @@
 import Sequelize, { Model } from "sequelize";
 import { sequelize } from "../models";
+import PostCategory from "./post_category";
 
 class Category extends Model {}
 
@@ -26,5 +27,8 @@ Category.init(
     tableName: "categories",
   }
 );
+
+Category.hasMany(PostCategory);
+PostCategory.belongsTo(Category);
 
 export default Category;
