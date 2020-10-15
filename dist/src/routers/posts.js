@@ -5,8 +5,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const post_1 = __importDefault(require("../models/post"));
+const category_1 = __importDefault(require("../models/category"));
 const router = express_1.default.Router();
-router.get("/", async (req, res) => { });
+router.get("/", async (req, res) => {
+    try {
+        const posts = await post_1.default.findAll({ include: { model: category_1.default } });
+        res.status(200).json({ posts });
+    }
+    catch (error) {
+        res.json({ error });
+    }
+});
 router.get("/:id", (req, res) => {
     res.send("posts/id");
 });
@@ -16,7 +25,7 @@ router.post("/", async (req, res) => {
     const postElemnts = { ...postElement, userId: userId };
     try {
         await post_1.default.signUpPost(postElemnts, categoryIds);
-        res.json({});
+        res.status(201).json({});
     }
     catch (error) {
         res.json({ error });

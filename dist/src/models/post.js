@@ -30,6 +30,8 @@ class Post extends sequelize_1.Model {
     static async signUpPost(postElement, categoryId) {
         await models_1.sequelize.transaction(async (transaction) => {
             const post = await Post.create(postElement, { transaction });
+            const categories = await category_1.default.findAll({ where: { id: categoryId } });
+            console.log(categories);
             for (let i = 0; i < categoryId.length; i++) {
                 await post_category_1.default.create({
                     postId: post.id,

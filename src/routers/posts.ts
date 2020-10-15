@@ -1,10 +1,18 @@
 import express, { Response, NextFunction } from "express";
 import Post from "../models/post";
 import PostCategory from "../models/post_category";
+import Category from "../models/category";
 
 const router = express.Router();
 
-router.get("/", async (req: any, res: Response) => {});
+router.get("/", async (req: any, res: Response) => {
+  try {
+    const posts = await Post.findAll({ include: { model: Category } });
+    res.status(200).json({ posts });
+  } catch (error) {
+    res.json({ error });
+  }
+});
 
 router.get("/:id", (req: any, res: Response) => {
   res.send("posts/id");
@@ -18,7 +26,7 @@ router.post("/", async (req: any, res: Response) => {
   const postElemnts = { ...postElement, userId: userId };
   try {
     await Post.signUpPost(postElemnts, categoryIds);
-    res.json({});
+    res.status(201).json({});
   } catch (error) {
     res.json({ error });
   }

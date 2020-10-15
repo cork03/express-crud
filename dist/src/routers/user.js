@@ -8,14 +8,14 @@ const category_1 = __importDefault(require("../models/category"));
 const router = express_1.default.Router();
 router.get("/", async (req, res) => {
     const { authorizeToken, ...user } = req.user.toJSON();
-    res.json({ user });
+    res.status(200).json({ user });
 });
 router.get("/posts", async (req, res) => {
     try {
         const posts = await req.user.getPosts({
             include: [{ model: category_1.default }],
         });
-        res.json({ posts });
+        res.status(200).json({ posts });
     }
     catch (error) {
         res.json({ error });
