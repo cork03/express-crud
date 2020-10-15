@@ -14,8 +14,14 @@ router.get("/", async (req: any, res: Response) => {
   }
 });
 
-router.get("/:id", (req: any, res: Response) => {
-  res.send("posts/id");
+router.get("/:id", async (req: any, res: Response) => {
+  const { id } = req.params;
+  try {
+    const post = await Post.findByPk(id{include: {model: Category}});
+    res.status(200).json({ post });
+  } catch (error) {
+    res.json({ error });
+  }
 });
 
 router.post("/", async (req: any, res: Response) => {
