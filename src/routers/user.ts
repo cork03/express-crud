@@ -11,7 +11,7 @@ router.get("/", async (req: any, res: Response) => {
 router.get("/posts", async (req: any, res: Response) => {
   try {
     const posts = await req.user.getPosts({
-      include: [{ model: Category }],
+      include: [{ model: Category, as: "categories" }],
     });
     res.status(200).json({ posts });
   } catch (error) {

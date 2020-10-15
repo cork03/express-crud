@@ -27,7 +27,6 @@ Category.init(
     tableName: "categories",
   }
 );
-
 Category.hasMany(PostCategory);
 PostCategory.belongsTo(Category);
 

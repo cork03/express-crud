@@ -9,7 +9,9 @@ const category_1 = __importDefault(require("../models/category"));
 const router = express_1.default.Router();
 router.get("/", async (req, res) => {
     try {
-        const posts = await post_1.default.findAll({ include: { model: category_1.default } });
+        const posts = await post_1.default.findAll({
+            include: { model: category_1.default, as: "categories" },
+        });
         res.status(200).json({ posts });
     }
     catch (error) {
@@ -19,7 +21,9 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
     const { id } = req.params;
     try {
-        const post = await post_1.default.findByPk(id, { include: { model: category_1.default } });
+        const post = await post_1.default.findByPk(id, {
+            include: { model: category_1.default, as: "categories" },
+        });
         res.status(200).json({ post });
     }
     catch (error) {
@@ -38,9 +42,7 @@ router.post("/", async (req, res) => {
         res.json({ error });
     }
 });
-router.patch("/:id", (req, res) => {
-    res.send("posts/id");
-});
+router.patch("/:id", (req, res) => { });
 router.delete("/:id", async (req, res) => {
     const { id } = req.params;
     try {

@@ -9,15 +9,13 @@ class Post extends Model {
     await sequelize.transaction(async (transaction) => {
       const post = await Post.create(postElement, { transaction });
       const categories = await Category.findAll({ where: { id: categoryId } });
-      console.log(categories);
-      for (let i: number = 0; i < categoryId.length; i++) {
-        await PostCategory.create(
-          {
+      if (post) {
+        await (post as any).setCategories(categories, {
+          through: {
             postId: post.id,
-            categoryId: categoryId[i],
           },
-          { transaction }
-        );
+          transaction: transaction,
+        });
       }
     });
   }
@@ -58,7 +56,7 @@ Post.init(
 
 Post.hasMany(PostCategory);
 PostCategory.belongsTo(Post);
-Post.belongsToMany(Category, { through: PostCategory });
+Post.belongsToMany(Category, { as: "categories", through: PostCategory });
 Category.belongsToMany(Post, { through: PostCategory });
 
 export default Post;

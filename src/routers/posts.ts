@@ -7,7 +7,9 @@ const router = express.Router();
 
 router.get("/", async (req: any, res: Response) => {
   try {
-    const posts = await Post.findAll({ include: { model: Category } });
+    const posts = await Post.findAll({
+      include: { model: Category, as: "categories" },
+    });
     res.status(200).json({ posts });
   } catch (error) {
     res.json({ error });
@@ -17,7 +19,9 @@ router.get("/", async (req: any, res: Response) => {
 router.get("/:id", async (req: any, res: Response) => {
   const { id } = req.params;
   try {
-    const post = await Post.findByPk(id, { include: { model: Category } });
+    const post = await Post.findByPk(id, {
+      include: { model: Category, as: "categories" },
+    });
     res.status(200).json({ post });
   } catch (error) {
     res.json({ error });
@@ -38,9 +42,7 @@ router.post("/", async (req: any, res: Response) => {
   }
 });
 
-router.patch("/:id", (req: any, res: Response) => {
-  res.send("posts/id");
-});
+router.patch("/:id", (req: any, res: Response) => {});
 
 router.delete("/:id", async (req: any, res: Response) => {
   const { id } = req.params;

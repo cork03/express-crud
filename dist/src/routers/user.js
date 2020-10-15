@@ -13,7 +13,7 @@ router.get("/", async (req, res) => {
 router.get("/posts", async (req, res) => {
     try {
         const posts = await req.user.getPosts({
-            include: [{ model: category_1.default }],
+            include: [{ model: category_1.default, as: "categories" }],
         });
         res.status(200).json({ posts });
     }
