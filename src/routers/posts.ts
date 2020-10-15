@@ -17,7 +17,7 @@ router.get("/", async (req: any, res: Response) => {
 router.get("/:id", async (req: any, res: Response) => {
   const { id } = req.params;
   try {
-    const post = await Post.findByPk(id{include: {model: Category}});
+    const post = await Post.findByPk(id, { include: { model: Category } });
     res.status(200).json({ post });
   } catch (error) {
     res.json({ error });
