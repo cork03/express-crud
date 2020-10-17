@@ -22,6 +22,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Posts = exports.Categories = exports.postCategory = exports.PostCategories = void 0;
 const sequelize_1 = __importStar(require("sequelize"));
 const models_1 = require("../models");
 const post_category_1 = __importDefault(require("./post_category"));
@@ -39,6 +40,18 @@ class Post extends sequelize_1.Model {
                     transaction: transaction,
                 });
             }
+        });
+    }
+    static async updatePost(postElement, postId, categoryId) {
+        await models_1.sequelize.transaction(async (transaction) => {
+            Post.update(postElement, { where: { id: postId } });
+            const post = await Post.findByPk(postId);
+            const categories = await category_1.default.findAll({ where: { id: categoryId } });
+            await post.setCategories(categories, {
+                through: {
+                    postId,
+                },
+            });
         });
     }
 }
@@ -71,9 +84,15 @@ Post.init({
     modelName: "post",
     tableName: "posts",
 });
-Post.hasMany(post_category_1.default);
-post_category_1.default.belongsTo(Post);
-Post.belongsToMany(category_1.default, { as: "categories", through: post_category_1.default });
-category_1.default.belongsToMany(Post, { through: post_category_1.default });
+exports.PostCategories = Post.hasMany(post_category_1.default);
+exports.postCategory = post_category_1.default.belongsTo(Post);
+exports.Categories = Post.belongsToMany(category_1.default, {
+    as: "categories",
+    through: "post_categories",
+});
+exports.Posts = category_1.default.belongsToMany(Post, {
+    as: "posts",
+    through: "post_categories",
+});
 exports.default = Post;
 //# sourceMappingURL=post.js.map

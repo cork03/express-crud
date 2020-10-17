@@ -5,6 +5,8 @@ import Category from "./category";
 
 class Post extends Model {
   public id?: number;
+  public setCategories?: Function;
+
   static async signUpPost(postElement: any, categoryId: number[]) {
     await sequelize.transaction(async (transaction) => {
       const post = await Post.create(postElement, { transaction });
@@ -17,6 +19,19 @@ class Post extends Model {
           transaction: transaction,
         });
       }
+    });
+  }
+
+  static async updatePost(postElement: any, postId: any, categoryId: number[]) {
+    await sequelize.transaction(async (transaction) => {
+      Post.update(postElement, { where: { id: postId } });
+      const post = await Post.findByPk(postId);
+      const categories = await Category.findAll({ where: { id: categoryId } });
+      await (post as any).setCategories(categories, {
+        through: {
+          postId,
+        },
+      });
     });
   }
 }
@@ -54,9 +69,15 @@ Post.init(
   }
 );
 
-Post.hasMany(PostCategory);
-PostCategory.belongsTo(Post);
-Post.belongsToMany(Category, { as: "categories", through: PostCategory });
-Category.belongsToMany(Post, { through: PostCategory });
+export const PostCategories = Post.hasMany(PostCategory);
+export const postCategory = PostCategory.belongsTo(Post);
+export const Categories = Post.belongsToMany(Category, {
+  as: "categories",
+  through: "post_categories",
+});
+export const Posts = Category.belongsToMany(Post, {
+  as: "posts",
+  through: "post_categories",
+});
 
 export default Post;

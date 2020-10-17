@@ -42,7 +42,17 @@ router.post("/", async (req, res) => {
         res.json({ error });
     }
 });
-router.patch("/:id", (req, res) => { });
+router.patch("/:id", async (req, res) => {
+    const { id } = req.params;
+    const { post: { categoryIds, ...updateElement }, } = req.body;
+    try {
+        await post_1.default.updatePost(updateElement, id, categoryIds);
+        res.status(200).json({});
+    }
+    catch (error) {
+        res.json({ error });
+    }
+});
 router.delete("/:id", async (req, res) => {
     const { id } = req.params;
     try {
