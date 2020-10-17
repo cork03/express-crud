@@ -16,19 +16,18 @@ passport.use(
       usernameField: "loginId",
       passwordField: "password",
     },
-    (loginId: string, password: string, done: Function) => {
-      return User.findOne({ where: { loginId } }).then(
-        async (user: User | null) => {
-          if (!user) {
-            return done(null, false);
-          }
-          const isCorrectPass = await compare(password, user.authorizeToken!);
-          if (!isCorrectPass) {
-            return done(null, false);
-          }
-          return done(null, user);
-        }
-      );
+    async (loginId: string, password: string, done: Function) => {
+      const user = await User.findOne({ where: { loginId } });
+      if (!user) {
+        console.log(1);
+        return done(null, false);
+      }
+      const isCorrectPass = await compare(password, user!.authorizeToken!);
+      if (!isCorrectPass) {
+        console.log(2);
+        return done(null, false);
+      }
+      return done(null, user);
     }
   )
 );
@@ -41,14 +40,11 @@ passport.use(
       jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
       secretOrKey: process.env.SECRET_KEY,
     },
-    (jwtPayload: any, done: Function) => {
-      return User.findOne({ where: { loginId: jwtPayload.loginId } })
-        .then((user: User | null) => {
-          return done(null, user);
-        })
-        .catch((error: Error) => {
-          return done(null, false);
-        });
+    async (jwtPayload: any, done: Function) => {
+      const user = await User.findOne({
+        where: { loginId: jwtPayload.loginId },
+      });
+      return done(null, user);
     }
   )
 );

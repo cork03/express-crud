@@ -7,7 +7,7 @@ class Post extends Model {
   public id?: number;
   public setCategories?: Function;
 
-  static async signUpPost(postElement: any, categoryId: number[]) {
+  static async add(postElement: any, categoryId: number[]) {
     await sequelize.transaction(async (transaction) => {
       const post = await Post.create(postElement, { transaction });
       const categories = await Category.findAll({ where: { id: categoryId } });
@@ -22,7 +22,11 @@ class Post extends Model {
     });
   }
 
-  static async updatePost(postElement: any, postId: any, categoryId: number[]) {
+  static async updateWithCategory(
+    postElement: any,
+    postId: any,
+    categoryId: number[]
+  ) {
     await sequelize.transaction(async (transaction) => {
       Post.update(postElement, { where: { id: postId } });
       const post = await Post.findByPk(postId);

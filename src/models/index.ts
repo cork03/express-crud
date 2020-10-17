@@ -6,7 +6,7 @@ export const sequelize = new Sequelize(
   config.username,
   config.password,
   {
-    host: "localhost",
+    host: config.host,
     dialect: "mysql",
   }
 );

@@ -1,11 +1,10 @@
-import express, { Response, NextFunction } from "express";
+import express, { Request, Response } from "express";
 import Post from "../models/post";
-import PostCategory from "../models/post_category";
 import Category from "../models/category";
 
 const router = express.Router();
 
-router.get("/", async (req: any, res: Response) => {
+router.get("/", async (req: Request, res: Response) => {
   try {
     const posts = await Post.findAll({
       include: { model: Category, as: "categories" },
@@ -16,7 +15,7 @@ router.get("/", async (req: any, res: Response) => {
   }
 });
 
-router.get("/:id", async (req: any, res: Response) => {
+router.get("/:id", async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
     const post = await Post.findByPk(id, {
@@ -35,27 +34,27 @@ router.post("/", async (req: any, res: Response) => {
   const userId = req.user.id;
   const postElemnts = { ...postElement, userId: userId };
   try {
-    await Post.signUpPost(postElemnts, categoryIds);
+    await Post.add(postElemnts, categoryIds);
     res.status(201).json({});
   } catch (error) {
     res.json({ error });
   }
 });
 
-router.patch("/:id", async (req: any, res: Response) => {
+router.patch("/:id", async (req: Request, res: Response) => {
   const { id } = req.params;
   const {
     post: { categoryIds, ...updateElement },
   } = req.body;
   try {
-    await Post.updatePost(updateElement, id, categoryIds);
+    await Post.updateWithCategory(updateElement, id, categoryIds);
     res.status(200).json({});
   } catch (error) {
     res.json({ error });
   }
 });
 
-router.delete("/:id", async (req: any, res: Response) => {
+router.delete("/:id", async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
     const post = await Post.findByPk(id);

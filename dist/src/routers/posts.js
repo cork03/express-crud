@@ -35,7 +35,7 @@ router.post("/", async (req, res) => {
     const userId = req.user.id;
     const postElemnts = { ...postElement, userId: userId };
     try {
-        await post_1.default.signUpPost(postElemnts, categoryIds);
+        await post_1.default.add(postElemnts, categoryIds);
         res.status(201).json({});
     }
     catch (error) {
@@ -46,7 +46,7 @@ router.patch("/:id", async (req, res) => {
     const { id } = req.params;
     const { post: { categoryIds, ...updateElement }, } = req.body;
     try {
-        await post_1.default.updatePost(updateElement, id, categoryIds);
+        await post_1.default.updateWithCategory(updateElement, id, categoryIds);
         res.status(200).json({});
     }
     catch (error) {

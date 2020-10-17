@@ -28,7 +28,7 @@ const models_1 = require("../models");
 const post_category_1 = __importDefault(require("./post_category"));
 const category_1 = __importDefault(require("./category"));
 class Post extends sequelize_1.Model {
-    static async signUpPost(postElement, categoryId) {
+    static async add(postElement, categoryId) {
         await models_1.sequelize.transaction(async (transaction) => {
             const post = await Post.create(postElement, { transaction });
             const categories = await category_1.default.findAll({ where: { id: categoryId } });
@@ -42,7 +42,7 @@ class Post extends sequelize_1.Model {
             }
         });
     }
-    static async updatePost(postElement, postId, categoryId) {
+    static async updateWithCategory(postElement, postId, categoryId) {
         await models_1.sequelize.transaction(async (transaction) => {
             Post.update(postElement, { where: { id: postId } });
             const post = await Post.findByPk(postId);

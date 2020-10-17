@@ -8,20 +8,24 @@ const router = express.Router();
 
 router.post("/signup", async (req: any, res: Response) => {
   const { user } = req.body;
-  const registeredUser = await User.findOne({
-    where: { loginId: user.loginId },
-  });
-  if (!user.password) {
-    return res.status(400).json({ error: "パスワードが入力されていません" });
+  try {
+    const registeredUser = await User.findOne({
+      where: { loginId: user.loginId },
+    });
+    if (!user.password) {
+      return res.status(400).json({ error: "パスワードが入力されていません" });
+    }
+    if (registeredUser) {
+      return res.status(422).json({ error: "すでに登録済みのユーザーです" });
+    }
+    const hashedPass = await hash(user.password);
+    user.authorizeToken = hashedPass;
+    delete user.password;
+    await User.create(user);
+    res.status(201).json({ massege: "ユーザーが作成されました。" });
+  } catch (error) {
+    res.json({ error });
   }
-  if (registeredUser) {
-    return res.status(422).json({ error: "すでに登録済みのユーザーです" });
-  }
-  const hashedPass = await hash(user.password);
-  user.authorizeToken = hashedPass;
-  delete user.password;
-  await User.create(user);
-  res.status(201).json({ massege: "ユーザーが作成されました。" });
 });
 
 router.post("/login", function (req: any, res: Response, next: NextFunction) {

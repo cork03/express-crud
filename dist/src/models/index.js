@@ -7,7 +7,7 @@ exports.connect = exports.sequelize = void 0;
 const sequelize_1 = require("sequelize");
 const config_1 = __importDefault(require("../config/config"));
 exports.sequelize = new sequelize_1.Sequelize(config_1.default.database, config_1.default.username, config_1.default.password, {
-    host: "localhost",
+    host: config_1.default.host,
     dialect: "mysql",
 });
 exports.connect = () => {

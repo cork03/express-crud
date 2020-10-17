@@ -11,20 +11,25 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const router = express_1.default.Router();
 router.post("/signup", async (req, res) => {
     const { user } = req.body;
-    const registeredUser = await user_1.default.findOne({
-        where: { loginId: user.loginId },
-    });
-    if (!user.password) {
-        return res.status(400).json({ error: "パスワードが入力されていません" });
+    try {
+        const registeredUser = await user_1.default.findOne({
+            where: { loginId: user.loginId },
+        });
+        if (!user.password) {
+            return res.status(400).json({ error: "パスワードが入力されていません" });
+        }
+        if (registeredUser) {
+            return res.status(422).json({ error: "すでに登録済みのユーザーです" });
+        }
+        const hashedPass = await bcrypt_1.hash(user.password);
+        user.authorizeToken = hashedPass;
+        delete user.password;
+        await user_1.default.create(user);
+        res.status(201).json({ massege: "ユーザーが作成されました。" });
     }
-    if (registeredUser) {
-        return res.status(422).json({ error: "すでに登録済みのユーザーです" });
+    catch (error) {
+        res.json({ error });
     }
-    const hashedPass = await bcrypt_1.hash(user.password);
-    user.authorizeToken = hashedPass;
-    delete user.password;
-    await user_1.default.create(user);
-    res.status(201).json({ massege: "ユーザーが作成されました。" });
 });
 router.post("/login", function (req, res, next) {
     passport_1.default.authenticate("local", { session: false }, (err, user, info) => {

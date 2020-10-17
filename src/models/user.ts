@@ -1,6 +1,7 @@
 import Sequelize, { Model } from "sequelize";
 import { sequelize } from "../models";
 import Post from "./post";
+import { hash } from "bcrypt";
 
 class User extends Model {
   public authorizeToken?: string;

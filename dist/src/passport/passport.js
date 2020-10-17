@@ -14,28 +14,26 @@ const ExtractJWT = passport_jwt_1.default.ExtractJwt;
 passport_1.default.use(new LocalStrategy({
     usernameField: "loginId",
     passwordField: "password",
-}, (loginId, password, done) => {
-    return user_1.default.findOne({ where: { loginId } }).then(async (user) => {
-        if (!user) {
-            return done(null, false);
-        }
-        const isCorrectPass = await bcrypt_1.compare(password, user.authorizeToken);
-        if (!isCorrectPass) {
-            return done(null, false);
-        }
-        return done(null, user);
-    });
+}, async (loginId, password, done) => {
+    const user = await user_1.default.findOne({ where: { loginId } });
+    if (!user) {
+        console.log(1);
+        return done(null, false);
+    }
+    const isCorrectPass = await bcrypt_1.compare(password, user.authorizeToken);
+    if (!isCorrectPass) {
+        console.log(2);
+        return done(null, false);
+    }
+    return done(null, user);
 }));
 passport_1.default.use(new JwtStrategy({
     jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
     secretOrKey: process.env.SECRET_KEY,
-}, (jwtPayload, done) => {
-    return user_1.default.findOne({ where: { loginId: jwtPayload.loginId } })
-        .then((user) => {
-        return done(null, user);
-    })
-        .catch((error) => {
-        return done(null, false);
+}, async (jwtPayload, done) => {
+    const user = await user_1.default.findOne({
+        where: { loginId: jwtPayload.loginId },
     });
+    return done(null, user);
 }));
 //# sourceMappingURL=passport.js.map
